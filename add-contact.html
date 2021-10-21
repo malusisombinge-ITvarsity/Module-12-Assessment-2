@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Book App Plus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section class="glass">
+            <div class="dashboard">
+                <div class="links">
+                  <div class="link">
+                    <button id="homeLink" type="button"><h2>Home</h2></button> 
+                  </div>
+                </div>
+            </div>
+
+            <div class="box1">
+                <div class="status">
+                    <h1>ADD CONTACTS</h1>
+                </div>
+
+                <div class="cards">
+                    <div id="table">
+                        <!-- inserts form  -->
+                        <form id="editForm"> 
+                            <label for="firstname">Firstname</label>
+                            <input type="text" name="firstname" id="firstname"><br/>
+                            <label for="lastname">Lastname</label>
+                            <input type="text" name="lastname" id="lastname"><br/>
+                            <label for="mobile">Mobile</label>
+                            <input type="text" name="mobile" id="mobile"><br/>
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email"><br/>
+                            <label for="avatar">Select a File</label>
+                            <input type="file" name="avatar" id="avatar"><br/>
+                            <button type="submit" id="submitForm"><h3>Submit</h3></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="config.js"></script>
+    <script>
+        document.getElementById("submitForm").addEventListener('click', submitForm);
+        document.getElementById("homeLink").addEventListener('click', homeLink);
+
+        function submitForm(e){
+            e.preventDefault();//Prevents the form's default function
+
+            const form = new FormData(document.querySelector('#editForm'));
+            form.append('apiKey', apiKey);
+
+            fetch(rootPath + 'controller/insert-contact/', {
+                method: 'POST',
+                headers: {'Accept': 'application/json, *.*'},
+                body: form
+            })
+            .then(function(response){
+                return response.text();
+            })
+            .then(function(data){
+                if(data == "1"){ //alerts user when contact is added
+                    alert("Contact added.");
+                    homeLink();
+                }else{ //alerts user when there's a error 
+                    alert(data);
+                    homeLink();
+                }
+            })
+        }
+
+        function homeLink(){//sends user to the home page 
+            window.open("index.html", "_self"); //opens new page
+        }
+
+    </script>
+</body>
+</html>
